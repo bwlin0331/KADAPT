@@ -18,6 +18,7 @@ public class MyBehaviorTree2 : MonoBehaviour
 		behaviorAgent = new BehaviorAgent (this.BuildTreeRoot ());
 		BehaviorManager.Instance.Register (behaviorAgent);
 		behaviorAgent.StartBehavior ();
+	
 	}
 
 	// Update is called once per frame
