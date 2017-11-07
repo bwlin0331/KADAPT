@@ -11,7 +11,7 @@ public class IOCamera: MonoBehaviour {
 	private Vector3 offset, rightoff;
 
 	void Start () {
-		offset = new Vector3(player.position.x, player.position.y + 10.0f, player.position.z);
+		offset = new Vector3(player.position.x, player.position.y + 4.0f, player.position.z+1.0f);
 		cam = GetComponent<Camera> ();
 	}
 	void Update(){

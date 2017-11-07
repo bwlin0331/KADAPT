@@ -95,15 +95,25 @@ public class UnitySteeringController : SteeringController
             float remaining = navAgent.remainingDistance;
             if (this.SlowArrival == true && remaining <= this.arrivingRadius)
             {
-                float speed = this.maxSpeed
-                    * (remaining / this.arrivingRadius);
+				float speed;
+				if (this.running) {
+					speed = this.maxSpeed2
+					              * (remaining / this.arrivingRadius);
+				} else {
+					speed = this.maxSpeed
+						* (remaining / this.arrivingRadius);
+				}
                 if (speed < minSpeed)
                     speed = minSpeed;
                 this.navAgent.speed = speed;
             }
             else
             {
-                this.navAgent.speed = this.maxSpeed;
+				if (this.running) {
+					this.navAgent.speed = this.maxSpeed2;
+				} else {
+					this.navAgent.speed = this.maxSpeed;
+				}
             }
         }
     }

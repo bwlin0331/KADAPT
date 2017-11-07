@@ -349,6 +349,9 @@ public class BodyMecanim : MonoBehaviour
             case "WRITING":
                 this.animator.SetBool("H_Writing", isActive);
                 break;
+			case "KILL":
+				this.animator.SetBool ("H_Kill", isActive);
+				break;
         }
     }
 
@@ -482,8 +485,15 @@ public class BodyMecanim : MonoBehaviour
     /// </summary>
     public void NavGoTo(Vector3 target)
     {
+		this.Steering.running = false;
         this.Steering.Target = target;
     }
+
+	public void NavRunTo(Vector3 target)
+	{
+		this.Steering.running = true;
+		this.Steering.Target = target;
+	}
 
     /// <summary>
     /// Starts a nudge towards a desired position

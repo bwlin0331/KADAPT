@@ -72,7 +72,7 @@ public class CharacterMecanim : MonoBehaviour
     /// </summary>
     public virtual RunStatus NavTurn(Val<Vector3> target)
     {
-        this.Body.NavSetOrientationBehavior(OrientationBehavior.None);
+		this.Body.NavSetOrientationBehavior(OrientationBehavior.None);
         this.Body.NavSetDesiredOrientation(target.Value);
         if (this.Body.NavIsFacingDesired() == true)
         {
@@ -137,6 +137,29 @@ public class CharacterMecanim : MonoBehaviour
         // TODO: Timeout? - AS
     }
 
+	public virtual RunStatus NavRunTo(Val<Vector3> target)
+	{
+		if (this.Body.NavCanReach(target.Value) == false)
+		{
+			Debug.LogWarning("NavGoTo failed -- can't reach target");
+			return RunStatus.Failure;
+		}
+		// TODO: I previously had this if statement here to prevent spam:
+		//     if (this.Interface.NavTarget() != target)
+		// It's good for limiting the amount of SetDestination() calls we
+		// make internally, but sometimes it causes the character1 to stand
+		// still when we re-activate a tree after it's been terminated. Look
+		// into a better way to make this smarter without false positives. - AS
+		this.Body.NavRunTo(target.Value);
+		if (this.Body.NavHasArrived() == true)
+		{
+			this.Body.NavStop();
+			this.Body.Steering.running = false;
+			return RunStatus.Success;
+		}
+		return RunStatus.Running;
+		// TODO: Timeout? - AS
+	}
     /// <summary>
     /// Lerps the character towards a target. Use for precise adjustments.
     /// </summary>

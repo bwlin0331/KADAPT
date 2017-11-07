@@ -54,9 +54,9 @@ public abstract class SteeringController : MonoBehaviour
     public float acceleration = 2.0f;
     public float maxSpeed = 2.2f;
     public float minSpeed = 0.5f;
-
+	public float maxSpeed2 = 7.0f;
     public bool SlowArrival = true;
-
+	public bool running = false;
     public bool ShowDragGizmo = false;
     public bool ShowAgentRadiusGizmo = false;
     public bool ShowTargetRadiusGizmo = false;

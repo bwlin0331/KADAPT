@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: cfd356efcf3214b458d91f23135d6e7b
+guid: 4ac890e9873bdc44994623291349bf89
 ModelImporter:
   serializedVersion: 21
   fileIDToRecycleName:
@@ -214,19 +214,19 @@ ModelImporter:
     - serializedVersion: 16
       name: Dying
       takeName: UNTY_die_tk02
-      firstFrame: 140
-      lastFrame: 275
+      firstFrame: 248
+      lastFrame: 271
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
+      loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 0

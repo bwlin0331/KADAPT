@@ -43,6 +43,13 @@ public class BehaviorMecanim : MonoBehaviour
             () => this.Character.NavStop());
     }
 
+	public Node Node_RunTo(Val<Vector3> targ)
+	{
+		return new LeafInvoke(
+			() => this.Character.NavRunTo(targ),
+			() => this.Character.NavStop());
+	}
+		
     public Node Node_NudgeTo(Val<Vector3> targ)
     {
         return new LeafInvoke(
@@ -115,6 +122,7 @@ public class BehaviorMecanim : MonoBehaviour
 
         return new LeafInvoke(
             GoUpToRadius,
+
             () => this.Character.NavStop());
     }
     #endregion
@@ -308,4 +316,27 @@ public class BehaviorMecanim : MonoBehaviour
                 new LeafInvoke(turn, stopTurning));
     }
     #endregion
+
+	#region sit
+	public Node Node_SitDown(){
+		return new LeafInvoke (
+			this.Character.SitDown);
+
+	}
+	public Node Node_StandUp(){
+
+		return new LeafInvoke (
+			this.Character.StandUp);
+
+	}
+
+	public Node Node_SitandStand(Val<long> duration){
+		return new Sequence (
+			Node_SitDown (),
+			new LeafWait (duration),
+			Node_StandUp ()
+		);
+
+	}
+	#endregion
 }
