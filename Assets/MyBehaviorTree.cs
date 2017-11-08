@@ -9,7 +9,7 @@ public class MyBehaviorTree : MonoBehaviour
 	public Transform wander1;
 	public Transform wander2;
 	public Transform wander3;
-	public GameObject daniel,dave,richard,victim;
+	public GameObject daniel,dave,richard,victim,guard;
 	public InteractionObject prop;
 	private BehaviorMecanim dan,dav,ric;
 	private Vector3 dn,dv;
@@ -61,8 +61,8 @@ public class MyBehaviorTree : MonoBehaviour
 
 	}
 	protected Node shakeHands(GameObject p1, GameObject p2){
-		InteractionObject p1hand = p1.transform.Find ("Interactions").transform.Find("INTER_Take").GetComponent<InteractionObject>();
-		InteractionObject p2hand = p2.transform.Find ("Interactions").transform.Find("INTER_Take").GetComponent<InteractionObject>();
+		InteractionObject p1hand = p1.transform.Find ("Interactions").transform.Find("INTER_Give").GetComponent<InteractionObject>();
+		InteractionObject p2hand = p2.transform.Find ("Interactions").transform.Find("INTER_Give").GetComponent<InteractionObject>();
 		return new Sequence (
 			new SequenceParallel(p1.GetComponent<BehaviorMecanim>().Node_StartInteraction(FullBodyBipedEffector.RightHand,p2hand),
 				p2.GetComponent<BehaviorMecanim>().Node_StartInteraction(FullBodyBipedEffector.RightHand,p1hand)),
@@ -126,17 +126,41 @@ public class MyBehaviorTree : MonoBehaviour
 	protected Node Story1(){
 		Val<Vector3> rp = Val.V (() => richard.transform.position);
 		Val<Vector3> dp = Val.V (() => daniel.transform.position);
+		Val<Vector3> gd = Val.V (() => guard.transform.position);
 		Func<bool> caught = () => ((rp.Value - dp.Value).magnitude < 1.2f);
+		Func<bool> survive = () => ((rp.Value - gd.Value).magnitude < 1.2f);
+		Node trigger = new DecoratorLoop (new LeafInvert(caught));
+		Node trigger2 = new DecoratorLoop (new LeafInvert(survive));
 		Debug.Log((rp.Value - dp.Value).magnitude.ToString());
 		return new Sequence (
 			ric.Node_GoToUpToRadius(victim.transform.position, 3.0f),
 			ric.ST_PlayBodyGesture("DUCK", 3000),
-			new SequenceParallel(
-				ric.Node_RunTo(Val.V(()=>wanders[2].position)),
-				new Sequence(new LeafWait(5000),dan.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f)),
-				new Sequence(new LeafWait(5000),dav.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f))),
-			dan.ST_PlayHandGesture("hitstealth",1000),
-			ric.ST_PlayBodyGesture("DYING",250)
+			new DecoratorForceStatus(RunStatus.Success,new SequenceParallel(
+				trigger,
+				trigger2,
+				new DecoratorLoop(ric.Node_RunTo(Val.V(()=>wanders[2].position))),
+				new Sequence(new LeafWait(5500),new DecoratorLoop(dan.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f))),
+				new Sequence(new LeafWait(5500),new DecoratorLoop(dav.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f))))),
+			new Selector(new Sequence(new LeafAssert(survive),End2()),
+				End1())
+				
+		);
+	}
+	protected Node End1(){
+		return new Sequence (
+			dan.ST_PlayHandGesture ("hitstealth", 1000),
+			ric.ST_PlayBodyGesture ("DYING", 250),
+			new LeafWait(3000));
+	}
+	protected Node End2(){
+		Val<Vector3> dp = Val.V (() => daniel.transform.position);
+		return new Sequence (
+			ric.ST_PlayHandGesture("shock",1000),
+			guard.GetComponent<BehaviorMecanim>().Node_OrientTowards(dp),
+			guard.GetComponent<BehaviorMecanim>().ST_PlayHandGesture("WARNINGSHOT",1000),
+			dan.ST_PlayHandGesture("Stayaway", 1000),
+			new LeafWait(3000)
+
 		);
 	}
 	protected Node BuildTreeRoot()

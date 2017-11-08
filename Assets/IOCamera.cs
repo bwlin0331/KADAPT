@@ -19,8 +19,9 @@ public class IOCamera: MonoBehaviour {
 			RaycastHit hit;
 			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray,out hit)){
-				Transform temp = hit.transform;
-				target.position = hit.point;
+				if (hit.point.y < 0.1f) {
+					target.position = hit.point;
+				}
 			}
 		}
 		if(Input.GetButtonDown("Fire2")){
