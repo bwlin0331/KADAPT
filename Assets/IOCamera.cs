@@ -5,7 +5,7 @@ using System.Collections;
 public class IOCamera: MonoBehaviour {
 
 	public float turnSpeed = 4.0f;
-	public Transform player;
+	public Transform player, target;
 
 	private Camera cam;
 	private Vector3 offset, rightoff;
@@ -15,12 +15,20 @@ public class IOCamera: MonoBehaviour {
 		cam = GetComponent<Camera> ();
 	}
 	void Update(){
+		if (Input.GetButtonDown ("Fire1")) {
+			RaycastHit hit;
+			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+			if(Physics.Raycast(ray,out hit)){
+				Transform temp = hit.transform;
+				target.position = hit.point;
+			}
+		}
 		if(Input.GetButtonDown("Fire2")){
 			RaycastHit hit;
 			Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 			if(Physics.Raycast(ray,out hit)){
 				Transform temp = hit.transform;
-				if(temp.CompareTag("npc")){
+				if(temp.name.CompareTo("ContextObject")==0){
 					this.player = temp;
 				}
 			}

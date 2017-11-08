@@ -102,6 +102,27 @@ public class BehaviorMecanim : MonoBehaviour
                 OrientationBehavior.LookForward));
     }
 
+	public Node Node_RunToUpToRadius(Val<Vector3> targ, Val<float> dist)
+	{
+		Func<RunStatus> RunUpToRadius =
+			delegate()
+		{
+			Vector3 targPos = targ.Value;
+			Vector3 curPos = this.transform.position;
+			if ((targPos - curPos).magnitude < dist.Value)
+			{
+				this.Character.NavStop();
+				return RunStatus.Success;
+			}
+			return this.Character.NavRunTo(targ);
+		};
+
+		return new LeafInvoke(
+			RunUpToRadius,
+
+			() => this.Character.NavStop());
+	}
+
     /// <summary>
     /// Approaches a target at a given radius
     /// </summary>
