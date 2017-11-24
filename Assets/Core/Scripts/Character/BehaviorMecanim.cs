@@ -219,7 +219,17 @@ public class BehaviorMecanim : MonoBehaviour
     }
 
     #endregion
-
+	#region myAnimation
+	public Node Play_Animation(Val<string> animName, Val<int> layer){
+		return new LeafInvoke (
+			() => this.Character.PlayAnimation (animName, layer));
+	}
+	public Node Play_AnimationTimeFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end){
+		return new Sequence(
+			new LeafWait(start),
+			new LeafInvoke (() => this.Character.PlayAnimationTimeFrame (animName, layer,start,end)));
+	}
+	#endregion
     #region Animation
     /// <summary>
     /// A Hand animation is started if the bool is true, the hand animation 

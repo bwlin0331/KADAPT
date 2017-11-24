@@ -146,6 +146,21 @@ public class BodyMecanim : MonoBehaviour
         this.ik.LookStop();
     }
     #endregion
+	#region Animatior Play
+	public void PlayAnimation(string animName, int layer){
+		//this.ResetAnimation ();
+		this.animator.SetLayerWeight(layer,1);
+		this.animator.Play (animName,layer);
+	}
+
+	public void PlayAnimationTimeFrame(string animName, int layer, long start, long end){
+		//this.ResetAnimation ();
+		long time = end - start;
+		this.animator.SetLayerWeight(layer,1);
+		this.animator.Play (animName,layer);
+	}
+
+	#endregion
 
     #region Animation Commands
     /// <summary>

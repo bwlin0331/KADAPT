@@ -297,7 +297,24 @@ public class CharacterMecanim : MonoBehaviour
 		return RunStatus.Success;
 	}
     #endregion
+	#region Animator Control
+	public virtual RunStatus PlayAnimation(Val<string> animName, Val<int> layer)
+	{
+		this.Body.PlayAnimation (animName.Value, layer.Value);
+		return RunStatus.Success;
 
+	}
+
+	public virtual RunStatus PlayAnimationTimeFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end)
+	{
+		if (start.Value >= end.Value) {
+			return RunStatus.Failure;
+		}
+		this.Body.PlayAnimationTimeFrame (animName.Value, layer.Value,start.Value, end.Value);
+		return RunStatus.Success;
+
+	}
+	#endregion
     #region Animation Commands
     public virtual RunStatus FaceAnimation(
         Val<string> gestureName, Val<bool> isActive)

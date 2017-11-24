@@ -38,10 +38,10 @@ public class MyBehaviorTree2 : MonoBehaviour
 		Val<float> pp = Val.V (() => police.transform.position.z);
 		Func<bool> act = () => (police.transform.position.z > 10);
 		Node roaming = new DecoratorLoop (
-			new Sequence(
-				this.ST_ApproachAndWait(this.wander1),
-				this.ST_ApproachAndWait(this.wander2),
-				this.ST_ApproachAndWait(this.wander3)));
+			               new Sequence (
+								this.ST_ApproachAndWait(wander1),
+								participant.GetComponent<BehaviorMecanim> ().Play_Animation ("WoodCut", 1),
+								this.ST_ApproachAndWait(wander2)));
 		Node trigger = new DecoratorLoop (new LeafAssert (act));
 		Node root = new DecoratorLoop (new DecoratorForceStatus (RunStatus.Success, new SequenceParallel(trigger, roaming)));
 		return root;
