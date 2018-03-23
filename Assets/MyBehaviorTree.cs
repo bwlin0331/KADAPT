@@ -174,7 +174,7 @@ public class MyBehaviorTree : MonoBehaviour
 			new DecoratorForceStatus(RunStatus.Success,new SequenceParallel(
 				trigger,
 				trigger2,
-				new DecoratorLoop(ric.Node_RunTo(Val.V(()=>wanders[2].position))),
+				new DecoratorLoop(new SelectorShuffle(ric.Node_RunTo(Val.V(()=>wanders[3].position)),ric.Node_RunTo(gd))),
 				new Sequence(new LeafWait(5500),new DecoratorLoop(dan.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f))),
 				new Sequence(new LeafWait(5500),new DecoratorLoop(dav.Node_RunToUpToRadius(Val.V(()=>richard.transform.position),1.5f))))),
 			new Selector(new Sequence(new LeafAssert(survive),End2()),

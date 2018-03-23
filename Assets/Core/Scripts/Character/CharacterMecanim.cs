@@ -305,12 +305,27 @@ public class CharacterMecanim : MonoBehaviour
 
 	}
 
-	public virtual RunStatus PlayAnimationTimeFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end)
+	/*public virtual RunStatus PlayAnimationTimeFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end)
 	{
 		if (start.Value >= end.Value) {
 			return RunStatus.Failure;
 		}
 		this.Body.PlayAnimationTimeFrame (animName.Value, layer.Value,start.Value, end.Value);
+		return RunStatus.Success;
+
+	}*/
+	public virtual RunStatus PlayAnimationStartFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end)
+	{
+		if (start.Value >= end.Value) {
+			return RunStatus.Failure;
+		}
+		this.Body.PlayAnimationStartFrame (animName.Value, layer.Value,start.Value);
+		return RunStatus.Success;
+
+	}
+	public virtual RunStatus PlayAnimationEndFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end)
+	{
+		this.Body.PlayAnimationEndFrame (animName.Value, layer.Value, end.Value);
 		return RunStatus.Success;
 
 	}

@@ -13,6 +13,11 @@ namespace TreeSharpPlus
         protected Stopwatch stopwatch;
         protected long waitMax;
 
+
+		public long GetWait() {
+			return waitMax;
+		}
+
         /// <summary>
         ///    Initializes with the wait period
         /// </summary>
@@ -23,6 +28,14 @@ namespace TreeSharpPlus
             this.waitMax = waitMax.Value;
             this.stopwatch = new Stopwatch();
         }
+
+		/// <summary>
+		/// Dynamically reduces the wait time if needed
+		/// </summary>
+		/// <param name="trim"></param>
+		public void TrimWait(long trim) {
+			this.waitMax -= trim;
+		}
 
         /// <summary>
         ///    Resets the wait timer

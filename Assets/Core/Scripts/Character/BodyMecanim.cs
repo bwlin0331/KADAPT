@@ -146,20 +146,46 @@ public class BodyMecanim : MonoBehaviour
         this.ik.LookStop();
     }
     #endregion
-	#region Animatior Play
+	#region Animator Play
 	public void PlayAnimation(string animName, int layer){
 		//this.ResetAnimation ();
 		this.animator.SetLayerWeight(layer,1);
-		this.animator.Play (animName,layer);
+		this.animator.CrossFade (animName,0.2f,layer);
+
 	}
 
-	public void PlayAnimationTimeFrame(string animName, int layer, long start, long end){
+	/*public void PlayAnimationTimeFrame(string animName, long layer, long start, long end){
 		//this.ResetAnimation ();
 		long time = end - start;
 		this.animator.SetLayerWeight(layer,1);
+		float t = time / 1000.0f;
+		this.animator.Play (animName,layer,t);
+	}*/
+	public void PlayAnimationStartFrame(string animName, int layer, long start){
 		this.animator.Play (animName,layer);
-	}
+		this.animator.SetLayerWeight (layer, 1.0f);
+		this.animator.GetCurrentAnimatorStateInfo (layer);
 
+		AnimatorStateInfo curr = animator.GetCurrentAnimatorStateInfo (layer);
+		float t = curr.length;
+		float s = start / 1000.0f;
+		float norm = s / t;
+		this.animator.CrossFade (animName, 0.1f, layer, norm);
+	}
+	public void PlayAnimationEndFrame(string animName, int layer, long end){
+		AnimatorStateInfo curr = animator.GetCurrentAnimatorStateInfo (layer);
+		if (!curr.IsName (animName)) {
+			return;
+		}
+		float t = curr.length;
+		float e = end / 1000.0f;
+		if (e > t) {
+			return;
+		}else{
+			this.animator.CrossFadeInFixedTime ("Idle", 0.05f, layer, 0.05f);
+
+		}
+	}
 	#endregion
 
     #region Animation Commands
@@ -262,7 +288,7 @@ public class BodyMecanim : MonoBehaviour
                 this.animator.SetBool("H_Fishing", isActive); 
                 break;
             case "CROWDPUMP": 
-                this.animator.SetBool("H_CrowdPump", isActive); 
+                this.animator.SetBool("H_CrowanidPump", isActive); 
                 break;
             case "POINTING": 
                 this.animator.SetBool("H_Pointing", isActive); 

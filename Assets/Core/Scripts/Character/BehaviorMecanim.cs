@@ -221,13 +221,17 @@ public class BehaviorMecanim : MonoBehaviour
     #endregion
 	#region myAnimation
 	public Node Play_Animation(Val<string> animName, Val<int> layer){
+		
+		//Debug.Log ("hi");
 		return new LeafInvoke (
 			() => this.Character.PlayAnimation (animName, layer));
 	}
 	public Node Play_AnimationTimeFrame(Val<string> animName, Val<int> layer, Val<long> start, Val<long> end){
-		return new Sequence(
-			new LeafWait(start),
-			new LeafInvoke (() => this.Character.PlayAnimationTimeFrame (animName, layer,start,end)));
+		return new Sequence (
+			new LeafInvoke (() => this.Character.PlayAnimationStartFrame (animName, layer, start, end)),
+			new LeafWait (end.Value - start.Value),
+			new LeafInvoke (() => this.Character.PlayAnimationEndFrame (animName, layer, start, end))
+		);
 	}
 	#endregion
     #region Animation
